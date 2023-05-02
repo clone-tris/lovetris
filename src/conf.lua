@@ -1,5 +1,7 @@
 local M = {}
 
+love.filesystem.setRequirePath("../vendor;" .. love.filesystem.getRequirePath())
+
 M.SQUARE_WIDTH = 24
 M.SQUARE_BORDER_WIDTH = 3
 M.PUZZLE_HEIGHT = 20
@@ -15,6 +17,9 @@ M.CANVAS_HEIGHT = M.PUZZLE_HEIGHT * M.SQUARE_WIDTH
 function love.conf(t)
   t.window.width = M.CANVAS_WIDTH
   t.window.height = M.CANVAS_HEIGHT
+  t.window.x = 5
+  t.window.y = 40
+  t.window.title = "Lövetris"
 end
 
 return M
