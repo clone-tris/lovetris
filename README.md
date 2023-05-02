@@ -1,1 +1,1 @@
-# lovetris
+# LÖVETRIS - A Tetris clone in LÖVE 2D
