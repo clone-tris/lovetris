@@ -1,16 +1,9 @@
-local conf = require "conf"
+local M = {}
 
-local Playfield = {}
+local painter = require("screens.game.playfield.painter")
 
-Playfield.paint = function()
-    love.graphics.setColor(0, 122, 0)
-    love.graphics.rectangle(
-        "fill",
-        conf.SIDEBAR_WIDTH,
-        0,
-        conf.WAR_ZONE_WIDTH,
-        conf.CANVAS_HEIGHT
-    )
+M.paint = function()
+  painter.draw_background()
 end
 
-return Playfield
+return M
