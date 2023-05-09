@@ -3,16 +3,16 @@ local conf = require("conf")
 local colors = require("colors")
 
 ---@class SidebarPainter: EnginePainter
-local SidebarPainter = setmetatable({}, { __index = EnginePainter })
-SidebarPainter.__index = SidebarPainter
+local Painter = setmetatable({}, { __index = EnginePainter })
+Painter.__index = Painter
 
 ---@param width number
 ---@param height number
-function SidebarPainter:new(width, height)
-  return setmetatable(EnginePainter:new(width, height), SidebarPainter)
+function Painter:new(width, height)
+  return setmetatable(EnginePainter:new(width, height), Painter)
 end
 
-function SidebarPainter:draw_background()
+function Painter:draw_background()
   love.graphics.setColor(colors.TetrominoColors.CYAN)
   love.graphics.rectangle(
     "fill",
@@ -23,4 +23,4 @@ function SidebarPainter:draw_background()
   )
 end
 
-return SidebarPainter
+return Painter
