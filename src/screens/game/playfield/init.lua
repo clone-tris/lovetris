@@ -1,3 +1,4 @@
+local conf = require("conf")
 local Screen = require("engine.screen")
 local Painter = require("screens.game.playfield.painter")
 
@@ -15,7 +16,14 @@ function Playfield:new(width, height)
 end
 
 function Playfield:paint()
+  love.graphics.setCanvas(self.painter.canvas)
+  --
   self.painter:draw_background()
+  self.painter:draw_guide()
+  --
+  love.graphics.setCanvas()
+  love.graphics.setColor(1, 1, 1)
+  love.graphics.draw(self.painter.canvas, conf.SIDEBAR_WIDTH, 0)
 end
 
 return Playfield

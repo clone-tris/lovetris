@@ -15,7 +15,13 @@ function Sidebar:new(width, height)
 end
 
 function Sidebar:paint()
+  love.graphics.setCanvas(self.painter.canvas)
+  --
   self.painter:draw_background()
+  --
+  love.graphics.setCanvas()
+  love.graphics.setColor(1, 1, 1)
+  love.graphics.draw(self.painter.canvas, 0, 0)
 end
 
 return Sidebar

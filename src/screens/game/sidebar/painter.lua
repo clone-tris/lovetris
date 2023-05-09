@@ -13,14 +13,8 @@ function Painter:new(width, height)
 end
 
 function Painter:draw_background()
-  love.graphics.setColor(colors.TetrominoColors.CYAN)
-  love.graphics.rectangle(
-    "fill",
-    0,
-    0,
-    self.canvas:getWidth(),
-    self.canvas:getHeight()
-  )
+  love.graphics.setColor(colors.UiColors.SIDEBAR_BACKGROUND)
+  love.graphics.clear(colors.UiColors.SIDEBAR_BACKGROUND)
 end
 
 return Painter
