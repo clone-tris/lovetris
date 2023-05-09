@@ -8,8 +8,13 @@ EnginePainter.__index = EnginePainter
 ---@param width number
 ---@param height number
 function EnginePainter:new(width, height)
-  local canvas = love.graphics.newCanvas(width, height)
-  return setmetatable({ width = width, height = height, canvas = canvas }, self)
+  local o = {
+    width = width,
+    height = height,
+    canvas = love.graphics.newCanvas(width, height),
+  }
+  setmetatable(o, self)
+  return o
 end
 
 return EnginePainter

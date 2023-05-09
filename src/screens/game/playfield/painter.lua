@@ -9,7 +9,7 @@ Painter.__index = Painter
 ---@param width number
 ---@param height number
 function Painter:new(width, height)
-  return setmetatable(EnginePainter:new(width, height), self)
+  return setmetatable(EnginePainter:new(width, height), Painter)
 end
 
 function Painter:draw_background()
@@ -18,8 +18,8 @@ function Painter:draw_background()
     "fill",
     conf.SIDEBAR_WIDTH,
     0,
-    conf.WAR_ZONE_WIDTH,
-    conf.CANVAS_HEIGHT
+    self.canvas:getWidth(),
+    self.canvas:getHeight()
   )
 end
 

@@ -1,5 +1,5 @@
-local Painter = require("screens.game.playfield.painter")
 local Screen = require("engine.screen")
+local Painter = require("screens.game.playfield.painter")
 
 ---@class Playfield: Screen
 ---@field painter Painter
@@ -9,13 +9,14 @@ Playfield.__index = Playfield
 ---@param width number
 ---@param height number
 function Playfield:new(width, height)
-  local meta = setmetatable(Screen:new(), self)
-  meta.painter = Painter:new(width, height)
-  return meta
+  local o = setmetatable(Screen:new(), Playfield)
+  o.painter = Painter:new(width, height)
+  return o
 end
 
 function Playfield:paint()
-  self.painter.draw_background()
+  print(self.painter)
+  self.painter:draw_background()
 end
 
 return Playfield

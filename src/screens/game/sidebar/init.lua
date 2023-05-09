@@ -1,11 +1,21 @@
-local conf = require("conf")
-local colors = require("colors")
+local Screen = require("engine.screen")
+local SidebarPainter = require("screens.game.sidebar.painter")
 
-local Sidebar = {}
+---@class Sidebar: Screen
+---@field painter SidebarPainter
+local Sidebar = setmetatable({}, { __index = Screen })
+Sidebar.__index = Sidebar
 
-Sidebar.paint = function()
-  love.graphics.setColor(colors.UiColors.SIDEBAR_BACKGROUND)
-  love.graphics.rectangle("fill", 0, 0, conf.SIDEBAR_WIDTH, conf.CANVAS_HEIGHT)
+---@param width number
+---@param height number
+function Sidebar:new(width, height)
+  local o = setmetatable(Screen:new(), Sidebar)
+  o.painter = SidebarPainter:new(width, height)
+  return o
+end
+
+function Sidebar:paint()
+  self.painter:draw_background()
 end
 
 return Sidebar
