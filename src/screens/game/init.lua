@@ -18,8 +18,16 @@ function Game:new()
 end
 
 function Game:paint()
+  love.graphics.setCanvas(self.sidebar.painter.canvas)
   self.sidebar:paint()
+
+  love.graphics.setCanvas(self.playfield.painter.canvas)
   self.playfield:paint()
+
+  love.graphics.setCanvas()
+  love.graphics.setColor(1, 1, 1)
+  love.graphics.draw(self.sidebar.painter.canvas, 0, 0)
+  love.graphics.draw(self.playfield.painter.canvas, conf.SIDEBAR_WIDTH, 0)
 end
 
 return Game
