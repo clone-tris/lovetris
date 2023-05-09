@@ -2,7 +2,7 @@ local EnginePainter = require("engine.painter")
 local conf = require("conf")
 local colors = require("colors")
 
----@class PlayfieldPainter: EnginePainter
+---@class Painter: EnginePainter
 local Painter = setmetatable({}, { __index = EnginePainter })
 Painter.__index = Painter
 

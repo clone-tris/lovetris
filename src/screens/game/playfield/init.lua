@@ -2,7 +2,7 @@ local Screen = require("engine.screen")
 local Painter = require("screens.game.playfield.painter")
 
 ---@class Playfield: Screen
----@field painter PlayfieldPainter
+---@field painter Painter
 local Playfield = setmetatable({}, { __index = Screen })
 Playfield.__index = Playfield
 
