@@ -36,18 +36,4 @@ function Painter:drawGuide()
   end
 end
 
-function Painter:drawShapeOnGrid(shape) end
-
----@param row number
----@param column number
----@param color Color
-function Painter:drawSquareOnGrid(row, column, color)
-  local x = column * conf.SQUARE_WIDTH
-  local y = row * conf.SQUARE_WIDTH
-
-  -- background
-  love.graphics.setColor(color)
-  love.graphics.rectangle("fill", x, y, conf.SQUARE_WIDTH, conf.SQUARE_WIDTH)
-end
-
 return Painter
