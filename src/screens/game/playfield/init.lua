@@ -1,4 +1,5 @@
 local conf = require("conf")
+local colors = require("colors")
 local Screen = require("engine.screen")
 local Painter = require("screens.game.playfield.painter")
 
@@ -16,8 +17,7 @@ function Playfield:new(width, height)
 end
 
 function Playfield:paint()
-  self.painter:draw_background()
-  self.painter:draw_guide()
+  self.painter:drawBackground()
 end
 
 return Playfield

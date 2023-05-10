@@ -1,5 +1,5 @@
-local M = {}
-
+---@param hex string
+---@return number[]
 local function hex2rgba(hex)
   return {
     tonumber(string.sub(hex, 2, 3), 16) / 256,
@@ -9,7 +9,8 @@ local function hex2rgba(hex)
   }
 end
 
-M.TetrominoColors = {
+---@enum TetrominoColors
+local TetrominoColors = {
   CYAN = hex2rgba("#6DECEE"),
   BLUE = hex2rgba("#0014E6"),
   ORANGE = hex2rgba("#E4A338"),
@@ -19,14 +20,16 @@ M.TetrominoColors = {
   RED = hex2rgba("#DC2F20"),
 }
 
-M.SquareColors = {
+---@enum SquareColors
+local SquareColors = {
   DEFAULT_SQUARE_COLOR = hex2rgba("#cc8081"),
   BORDER_TOP = hex2rgba("#ffffffb3"),
   BORDER_BOTTOM = hex2rgba("#00000080"),
   BORDER_SIDE = hex2rgba("#0000001a"),
 }
 
-M.UiColors = {
+---@enum UiColors
+local UiColors = {
   BACKGROUND = hex2rgba("#333333"),
   SIDEBAR_BACKGROUND = hex2rgba("#545454"),
   POPUP_BACKGROUND = hex2rgba("#212121"),
@@ -35,4 +38,10 @@ M.UiColors = {
   POPUP_TEXT = hex2rgba("#EFEFEF"),
 }
 
-return M
+---@alias Color UiColors|TetrominoColors|SquareColors
+
+return {
+  TetrominoColors = TetrominoColors,
+  UiColors = UiColors,
+  SquareColors = SquareColors,
+}

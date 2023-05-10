@@ -17,11 +17,11 @@ function Painter:new(width, height)
   return o
 end
 
-function Painter:draw_background()
+function Painter:drawBackground()
   love.graphics.clear(colors.UiColors.BACKGROUND)
 end
 
-function Painter:draw_guide()
+function Painter:drawGuide()
   local rows = self.height / conf.SQUARE_WIDTH
   local columns = self.width / conf.SQUARE_WIDTH
   for i = 0, (rows + 1) do
@@ -34,6 +34,20 @@ function Painter:draw_guide()
     love.graphics.setColor(colors.UiColors.GUIDE)
     love.graphics.line(lineX, 0, lineX, self.height)
   end
+end
+
+function Painter:drawShapeOnGrid(shape) end
+
+---@param row number
+---@param column number
+---@param color Color
+function Painter:drawSquareOnGrid(row, column, color)
+  local x = column * conf.SQUARE_WIDTH
+  local y = row * conf.SQUARE_WIDTH
+
+  -- background
+  love.graphics.setColor(color)
+  love.graphics.rectangle("fill", x, y, conf.SQUARE_WIDTH, conf.SQUARE_WIDTH)
 end
 
 return Painter
