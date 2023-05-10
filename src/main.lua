@@ -1,5 +1,4 @@
 local Game = require("screens.game")
-local colors = require("colors")
 
 local game = Game:new()
 

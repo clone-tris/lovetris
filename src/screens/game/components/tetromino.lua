@@ -1,7 +1,9 @@
+local Square = require("screens.game.components.square")
+local Shape = require("screens.game.components.shape")
+
 local M = {}
 
 local colors = require("colors")
-local rand = require("utils").rand
 
 ---@enum Tetromino
 local Tetromino = {
@@ -14,7 +16,13 @@ local Tetromino = {
   I = "I",
 }
 
-local tetrominoGrids = {
+---@type Tetromino[]
+local Names = {}
+for k in pairs(Tetromino) do
+  table.insert(Names, k)
+end
+
+local Grids = {
   [Tetromino.T] = { { 0, 0 }, { 0, 1 }, { 0, 2 }, { 1, 1 } },
   [Tetromino.Z] = { { 0, 0 }, { 0, 1 }, { 1, 1 }, { 1, 2 } },
   [Tetromino.S] = { { 0, 1 }, { 0, 2 }, { 1, 0 }, { 1, 1 } },
@@ -24,18 +32,27 @@ local tetrominoGrids = {
   [Tetromino.I] = { { 0, 0 }, { 0, 1 }, { 0, 2 }, { 0, 3 } },
 }
 
-local tetromominoColors = {
-  [Tetromino.T] = colors.TetrominoColors.Purple,
-  [Tetromino.Z] = colors.TetrominoColors.Red,
-  [Tetromino.S] = colors.TetrominoColors.Green,
-  [Tetromino.L] = colors.TetrominoColors.Orange,
-  [Tetromino.J] = colors.TetrominoColors.Blue,
-  [Tetromino.O] = colors.TetrominoColors.Yellow,
-  [Tetromino.I] = colors.TetrominoColors.Cyan,
+local Colors = {
+  [Tetromino.T] = colors.TetrominoColors.PURPLE,
+  [Tetromino.Z] = colors.TetrominoColors.RED,
+  [Tetromino.S] = colors.TetrominoColors.GREEN,
+  [Tetromino.L] = colors.TetrominoColors.ORANGE,
+  [Tetromino.J] = colors.TetrominoColors.BLUE,
+  [Tetromino.O] = colors.TetrominoColors.YELLOW,
+  [Tetromino.I] = colors.TetrominoColors.CYAN,
 }
 
 M.randomTetromino = function()
-  return math.random(10)
+  local name = Names[math.random(#Names)]
+  local grid = Grids[name]
+  local color = Colors[name]
+
+  local squares = {}
+  for _, cell in ipairs(grid) do
+    table.insert(squares, Square:new(cell[1], cell[2], color))
+  end
+
+  return Shape:new(0, 0, squares)
 end
 
 return M

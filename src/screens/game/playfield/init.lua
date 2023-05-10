@@ -18,17 +18,9 @@ Playfield.__index = Playfield
 function Playfield:new(width, height)
   local o = setmetatable(Screen:new(), Playfield)
   o.painter = Painter:new(width, height)
-  o.player = Shape:new(0, 0, {
-    Square:new(1, 1, colors.TetrominoColors.BLUE),
-    Square:new(1, 2, colors.TetrominoColors.BLUE),
-    Square:new(2, 3, colors.TetrominoColors.BLUE),
-    Square:new(4, 5, colors.TetrominoColors.BLUE),
-    Square:new(5, 1, colors.TetrominoColors.BLUE),
-  })
+  o.player = tetromino.randomTetromino()
   return o
 end
-
-print(tetromino.randomTetromino())
 
 function Playfield:paint()
   self.painter:drawBackground()
