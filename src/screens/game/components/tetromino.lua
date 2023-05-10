@@ -44,15 +44,7 @@ local Colors = {
 
 M.randomTetromino = function()
   local name = Names[math.random(#Names)]
-  local grid = Grids[name]
-  local color = Colors[name]
-
-  local squares = {}
-  for _, cell in ipairs(grid) do
-    table.insert(squares, Square:new(cell[1], cell[2], color))
-  end
-
-  return Shape:new(0, 0, squares)
+  return Shape:new(0, 0, Grids[name], Colors[name])
 end
 
 return M
