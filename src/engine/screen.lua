@@ -2,6 +2,7 @@
 local Screen = {}
 Screen.__index = Screen
 
+---@return Screen
 function Screen:new()
   return setmetatable({}, self)
 end

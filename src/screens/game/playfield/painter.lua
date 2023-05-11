@@ -2,7 +2,7 @@ local EnginePainter = require("engine.painter")
 local conf = require("conf")
 local colors = require("colors")
 
----@class Painter: EnginePainter
+---@class PlayfieldPainter: EnginePainter
 ---@field width number
 ---@field height number
 local Painter = setmetatable({}, { __index = EnginePainter })
@@ -10,6 +10,7 @@ Painter.__index = Painter
 
 ---@param width number
 ---@param height number
+---@return PlayfieldPainter
 function Painter:new(width, height)
   local o = setmetatable(EnginePainter:new(width, height), Painter)
   o.width = width

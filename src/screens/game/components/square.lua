@@ -10,6 +10,7 @@ Square.__index = Square
 ---@param row number
 ---@param column number
 ---@param color Color
+---@return Square
 function Square:new(row, column, color)
   local o = { row = row, column = column, color = color }
   setmetatable(o, self)

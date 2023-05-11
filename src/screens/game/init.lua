@@ -8,6 +8,7 @@ local conf = require("conf")
 local Game = {}
 Game.__index = Game
 
+---@return GameScreen
 function Game:new()
   local o = {
     playfield = Playfield:new(conf.WAR_ZONE_WIDTH, conf.CANVAS_HEIGHT),

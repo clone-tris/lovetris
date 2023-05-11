@@ -15,6 +15,7 @@ Shape.__index = Shape
 ---@param squares Square[]
 ---@param color Color
 ---@param size? {width: number, height: number}
+---@return Shape
 function Shape:new(row, column, squares, color, size)
   local o = {
     row = row,
@@ -72,6 +73,24 @@ function Shape:translate(rowDirection, columnDirection)
   self.column = self.column + columnDirection
 end
 
+function Shape:copy()
+  local squaresCopy = {}
+  for _, square in ipairs(self.squares) do
+    table.insert(squaresCopy, square:copy())
+  end
+
+  local copy = Shape:new(
+    self.row,
+    self.column,
+    squaresCopy,
+    self.color,
+    { width = self.width, height = self.height }
+  )
+
+  return copy
+end
+
+---@return Square[]
 function Shape:absoluteGrid()
   local grid = {}
   for _, square in ipairs(self.squares) do
@@ -93,6 +112,18 @@ function Shape:collidesWith(b)
     end
   end
   return false
+end
+
+---@param pray Shape
+function Shape:eat(pray)
+  local newGrid = self.squares
+  local prayGrid = pray:absoluteGrid()
+
+  for _, praySquare in ipairs(prayGrid) do
+    table.insert(newGrid, praySquare)
+  end
+
+  self.squares = newGrid
 end
 
 return Shape

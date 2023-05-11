@@ -14,8 +14,17 @@ local utils = require("utils")
 local Playfield = setmetatable({}, { __index = Screen })
 Playfield.__index = Playfield
 
+local a = tetromino.randomTetromino()
+local b = tetromino.randomTetromino()
+
+a.row = 0
+b.row = 0
+
+a:eat(b)
+
 ---@param width number
 ---@param height number
+---@return Playfield
 function Playfield:new(width, height)
   local o = setmetatable(Screen:new(), Playfield)
   o.painter = Painter:new(width, height)
@@ -27,8 +36,10 @@ end
 
 function Playfield:paint()
   self.painter:drawBackground()
+
   self.painter:drawGuide()
-  self.player:draw()
+  -- self.player:draw()
+  a:draw()
 end
 
 return Playfield
