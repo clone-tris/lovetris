@@ -116,7 +116,7 @@ end
 
 ---@param pray Shape
 function Shape:eat(pray)
-  local newGrid = self.squares
+  local newGrid = self:copy().squares
   local prayGrid = pray:absoluteGrid()
 
   for _, praySquare in ipairs(prayGrid) do

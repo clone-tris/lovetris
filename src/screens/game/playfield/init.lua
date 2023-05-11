@@ -14,22 +14,21 @@ local utils = require("utils")
 local Playfield = setmetatable({}, { __index = Screen })
 Playfield.__index = Playfield
 
-local a = tetromino.randomTetromino()
-local b = tetromino.randomTetromino()
-
-a.row = 0
-b.row = 0
-
-a:eat(b)
-
 ---@param width number
 ---@param height number
 function Playfield:new(width, height)
   local o = setmetatable(Screen:new(), Playfield)
   o.painter = Painter:new(width, height)
+  o.opponent = Shape:new(
+    0,
+    0,
+    true and {} or tetromino.randomTetromino().squares,
+    colors.SquareColors.DEFAULT_SQUARE_COLOR,
+    { width = conf.PUZZLE_WIDTH, height = conf.PUZZLE_HEIGHT }
+  )
   o.player = tetromino.randomTetromino()
-  o.player.row = 3
-  o.player.column = 3
+  o.opponent:eat(o.player)
+
   return o
 end
 
@@ -37,8 +36,7 @@ function Playfield:paint()
   self.painter:drawBackground()
 
   self.painter:drawGuide()
-  -- self.player:draw()
-  a:draw()
+  self.opponent:draw()
 end
 
 return Playfield
