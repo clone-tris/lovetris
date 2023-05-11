@@ -126,4 +126,17 @@ function Shape:eat(pray)
   self.squares = newGrid
 end
 
+function Shape:withinBounds()
+  for _, square in ipairs(self:absoluteGrid()) do
+    if
+      square.column < 0
+      or square.column >= conf.PUZZLE_WIDTH
+      or square.row >= conf.PUZZLE_HEIGHT
+    then
+      return false
+    end
+  end
+  return true
+end
+
 return Shape

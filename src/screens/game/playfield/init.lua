@@ -27,7 +27,6 @@ function Playfield:new(width, height)
     { width = conf.PUZZLE_WIDTH, height = conf.PUZZLE_HEIGHT }
   )
   o.player = tetromino.randomTetromino()
-  o.opponent:eat(o.player)
 
   return o
 end
@@ -37,6 +36,7 @@ function Playfield:paint()
 
   self.painter:drawGuide()
   self.opponent:draw()
+  self.player:draw()
 end
 
 return Playfield
