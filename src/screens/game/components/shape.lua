@@ -7,19 +7,26 @@ local Square = require("screens.game.components.square")
 ---@field width number
 ---@field height number
 ---@field color Color
----@field grid number[][]
 ---@field squares Square[]
 local Shape = {}
 Shape.__index = Shape
 
 ---@param row number
 ---@param column number
----@param grid number[][]
+---@param squares Square[]
 ---@param color Color
-function Shape:new(row, column, grid, color)
-  local o = { row = row, column = column, grid = grid, color = color, width = 0, height = 0 }
+---@param width number?
+---@param height number?
+function Shape:new(row, column, squares, color, width, height)
+  local o = {
+    row = row,
+    column = column,
+    squares = squares,
+    color = color,
+    width = width or 0,
+    height = height or 0,
+  }
 
-  o.squares = Shape.squaresFromGrid(self, grid, color)
   if #o.squares > 0 then
     self.computeSize(o)
   end
@@ -33,17 +40,6 @@ function Shape:draw()
   for _, square in ipairs(self.squares) do
     square:draw()
   end
-end
-
----@param grid number[][]
----@param color Color
----@return Square[]
-function Shape:squaresFromGrid(grid, color)
-  local squares = {}
-  for _, cell in ipairs(grid) do
-    table.insert(squares, Square:new(cell[1], cell[2], color))
-  end
-  return squares
 end
 
 function Shape:computeSquaresAbsolutePositions()
