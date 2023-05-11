@@ -105,4 +105,8 @@ function Square:draw(refRow, refColumn)
   )
 end
 
+function Square:copy()
+  return Square:new(self.row, self.column, self.color)
+end
+
 return Square

@@ -20,6 +20,8 @@ function Playfield:new(width, height)
   local o = setmetatable(Screen:new(), Playfield)
   o.painter = Painter:new(width, height)
   o.player = tetromino.randomTetromino()
+  o.player.row = 3
+  o.player.column = 3
   return o
 end
 

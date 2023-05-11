@@ -65,4 +65,34 @@ function Shape:computeSize()
   self.width = maxColumn - minRow + 1
 end
 
+---@param rowDirection number
+---@param columnDirection number
+function Shape:translate(rowDirection, columnDirection)
+  self.row = self.row + rowDirection
+  self.column = self.column + columnDirection
+end
+
+function Shape:absoluteGrid()
+  local grid = {}
+  for _, square in ipairs(self.squares) do
+    local absoluteSquare = square:copy()
+    absoluteSquare.row = square.row + self.row
+    absoluteSquare.column = square.column + self.column
+    table.insert(grid, absoluteSquare)
+  end
+  return grid
+end
+
+---@param b Shape
+function Shape:collidesWith(b)
+  for _, squareA in ipairs(self:absoluteGrid()) do
+    for _, squareB in ipairs(b:absoluteGrid()) do
+      if squareB.row == squareA.row and squareB.column == squareA.column then
+        return true
+      end
+    end
+  end
+  return false
+end
+
 return Shape

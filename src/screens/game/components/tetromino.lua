@@ -42,6 +42,7 @@ local Colors = {
   [Tetromino.I] = colors.TetrominoColors.CYAN,
 }
 
+---@return Shape
 M.randomTetromino = function()
   local name = Names[math.random(#Names)]
   local squares = {}
