@@ -15,16 +15,14 @@ Shape.__index = Shape
 ---@param column number
 ---@param squares Square[]
 ---@param color Color
----@param width number?
----@param height number?
-function Shape:new(row, column, squares, color, width, height)
+function Shape:new(row, column, squares, color)
   local o = {
     row = row,
     column = column,
     squares = squares,
     color = color,
-    width = width or 0,
-    height = height or 0,
+    width = 0,
+    height = 0,
   }
 
   if #o.squares > 0 then
