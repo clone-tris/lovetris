@@ -1,4 +1,5 @@
 local conf = require("conf")
+
 ---@class Square
 ---@field row number
 ---@field column number
@@ -15,9 +16,11 @@ function Square:new(row, column, color)
   return o
 end
 
-function Square:draw()
-  local x = self.column * conf.SQUARE_WIDTH
-  local y = self.row * conf.SQUARE_WIDTH
+---@param refRow number
+---@param refColumn number
+function Square:draw(refRow, refColumn)
+  local x = (refColumn + self.column) * conf.SQUARE_WIDTH
+  local y = (refRow + self.row) * conf.SQUARE_WIDTH
 
   -- background
   love.graphics.setColor(self.color)

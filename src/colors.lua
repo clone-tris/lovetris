@@ -1,11 +1,12 @@
 ---@param hex string
 ---@return number[]
 local function hex2rgba(hex)
+  local hasAlpha = string.len(hex) == 9
   return {
     tonumber(string.sub(hex, 2, 3), 16) / 256,
     tonumber(string.sub(hex, 4, 5), 16) / 256,
     tonumber(string.sub(hex, 6, 7), 16) / 256,
-    string.len(hex) == 9 and tonumber(string.sub(hex, 8, 9), 16) / 256 or 1,
+    hasAlpha and tonumber(string.sub(hex, 8, 9), 16) / 256 or 1,
   }
 end
 

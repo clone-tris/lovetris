@@ -1,5 +1,4 @@
 local conf = require("conf")
-local Square = require("screens.game.components.square")
 
 ---@class Shape
 ---@field row number
@@ -15,17 +14,18 @@ Shape.__index = Shape
 ---@param column number
 ---@param squares Square[]
 ---@param color Color
-function Shape:new(row, column, squares, color)
+---@param size? {width: number, height: number}
+function Shape:new(row, column, squares, color, size)
   local o = {
     row = row,
     column = column,
     squares = squares,
     color = color,
-    width = 0,
-    height = 0,
+    width = size and size.width or 0,
+    height = size and size.height or 0,
   }
 
-  if #o.squares > 0 then
+  if #o.squares > 0 and size == nil then
     self.computeSize(o)
   end
 
@@ -36,12 +36,7 @@ end
 
 function Shape:draw()
   for _, square in ipairs(self.squares) do
-    square:draw()
-  end
-end
-
-function Shape:computeSquaresAbsolutePositions()
-  for _, square in ipairs(self.squares) do
+    square:draw(self.row, self.column)
   end
 end
 
