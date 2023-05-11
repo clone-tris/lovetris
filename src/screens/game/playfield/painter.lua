@@ -10,7 +10,6 @@ Painter.__index = Painter
 
 ---@param width number
 ---@param height number
----@return PlayfieldPainter
 function Painter:new(width, height)
   local o = setmetatable(EnginePainter:new(width, height), Painter)
   o.width = width

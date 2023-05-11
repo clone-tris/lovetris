@@ -8,7 +8,6 @@ Painter.__index = Painter
 
 ---@param width number
 ---@param height number
----@return SidebarPainter
 function Painter:new(width, height)
   return setmetatable(EnginePainter:new(width, height), Painter)
 end

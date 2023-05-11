@@ -7,7 +7,6 @@ EnginePainter.__index = EnginePainter
 
 ---@param width number
 ---@param height number
----@return EnginePainter
 function EnginePainter:new(width, height)
   local o = {
     width = width,

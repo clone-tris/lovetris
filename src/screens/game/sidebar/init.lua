@@ -8,7 +8,6 @@ Sidebar.__index = Sidebar
 
 ---@param width number
 ---@param height number
----@return Sidebar
 function Sidebar:new(width, height)
   local o = setmetatable(Screen:new(), Sidebar)
   o.painter = SidebarPainter:new(width, height)

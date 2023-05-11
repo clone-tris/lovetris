@@ -8,7 +8,7 @@ local tetromino = require("screens.game.components.tetromino")
 local utils = require("utils")
 
 ---@class Playfield: Screen
----@field painter Painter
+---@field painter PlayfieldPainter
 ---@field player Shape
 ---@field opponent Shape
 local Playfield = setmetatable({}, { __index = Screen })
@@ -24,7 +24,6 @@ a:eat(b)
 
 ---@param width number
 ---@param height number
----@return Playfield
 function Playfield:new(width, height)
   local o = setmetatable(Screen:new(), Playfield)
   o.painter = Painter:new(width, height)
