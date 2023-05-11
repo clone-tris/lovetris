@@ -27,7 +27,6 @@ function Playfield:new(width, height)
     { width = conf.PUZZLE_WIDTH, height = conf.PUZZLE_HEIGHT }
   )
   o.player = tetromino.randomTetromino()
-
   return o
 end
 

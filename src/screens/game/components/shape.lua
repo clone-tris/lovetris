@@ -139,4 +139,18 @@ function Shape:withinBounds()
   return true
 end
 
+function Shape:rotate()
+  local newSquares = {}
+  for _, square in ipairs(self.squares) do
+    local newSquare = square:copy()
+    newSquare.row = square.column
+    newSquare.column = self.height - square.row - 1
+    table.insert(newSquares, newSquare)
+  end
+
+  self.squares = newSquares
+
+  self:computeSize()
+end
+
 return Shape
