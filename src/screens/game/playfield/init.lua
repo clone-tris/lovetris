@@ -14,11 +14,16 @@ local utils = require("utils")
 ---@field opponent Shape
 ---@field score Score
 ---@field fallRate number
+---@field floorRate number
+---@field onFloor boolean
+---@field isGameEnded boolean
+---@field endOfLock number
 local Playfield = setmetatable({}, { __index = Screen })
 
 ---@param width number
 ---@param height number
 function Playfield:new(width, height)
+  ---@type Playfield
   local o = Screen:new()
   setmetatable(o, self)
   self.__index = self
@@ -34,39 +39,21 @@ function Playfield:new(width, height)
   o.player = tetromino.randomTetromino()
   o.nextPlayer = tetromino.randomTetromino()
   o.score = Score:new()
+  o.fallRate = 100
+  o.floorRate = 50
+  o.onFloor = false
+  o.isGameEnded = false
+  o.endOfLock = os.timeInMils()
 
-  o.spawnPlayer(o)
+  o:spawnPlayer()
 
-  local a = tetromino.getTetromino("I")
-  local b = tetromino.getTetromino("I")
-  local c = tetromino.getTetromino("O")
-  local a2 = tetromino.getTetromino("I")
-  local b2 = tetromino.getTetromino("I")
-
-  a.row = conf.PUZZLE_HEIGHT - 1
-  b.row = conf.PUZZLE_HEIGHT - 1
-  b.column = 4
-  c.row = conf.PUZZLE_HEIGHT - 2
-  c.column = 8
-
-  a2.row = conf.PUZZLE_HEIGHT - 2
-  b2.row = conf.PUZZLE_HEIGHT - 2
-  b2.column = 4
-
-  -- o.opponent:eat(a)
-  -- o.opponent:eat(b)
-  -- o.opponent:eat(c)
-  -- o.opponent:eat(a2)
-  -- o.opponent:eat(b2)
-
-  -- print(o.opponent:removeFullLines())
+  o.player.row = 4
 
   return o
 end
 
 function Playfield:paint()
   self.painter:drawBackground()
-
   self.painter:drawGuide()
   self.opponent:draw()
   self.player:draw()
@@ -104,9 +91,63 @@ end
 function Playfield:spawnPlayer()
   local player = self.nextPlayer:copy()
   player.row = player.row - player.height
-  player.column = (conf.PUZZLE_WIDTH - player.width) / 2
+  player.column = math.floor((conf.PUZZLE_WIDTH - player.width) / 2)
   self.player = player
   self.nextPlayer = tetromino:randomTetromino()
+end
+
+function Playfield:rotate()
+  local forshadow = self.player:copy()
+  forshadow:rotate()
+  if forshadow:collidesWith(self.opponent) or (not forshadow:withinBounds()) then
+    return
+  end
+  self.player = forshadow
+end
+
+---@param rowDirection number
+---@param columnDirection number
+function Playfield:movePlayer(rowDirection, columnDirection)
+  local foreshadow = self.player:copy()
+  local movingDown = rowDirection == 1
+  foreshadow:translate(rowDirection, columnDirection)
+  local ableToMove = (not foreshadow:collidesWith(self.opponent)) and foreshadow:withinBounds()
+
+  if ableToMove then
+    self.player = foreshadow
+    if movingDown then
+      self.onFloor = false
+    end
+  else
+    if movingDown then
+      self:handleFallingDown()
+    end
+  end
+  return ableToMove
+end
+
+function Playfield:handleFallingDown()
+  local time = os.timeInMils()
+  if not self.onFloor then
+    self.onFloor = true
+    self.endOfLock = time + self.floorRate
+    return
+  else
+    if time < self.endOfLock then
+      return
+    end
+  end
+
+  self:eatPlayer()
+  self:spawnPlayer()
+
+  if self.player:collidesWith(self.opponent) then
+    self.game_ended = true
+  end
+end
+
+function Playfield:fallDown()
+  return self:movePlayer(1, 0)
 end
 
 return Playfield

@@ -1,3 +1,5 @@
+local socket = require("socket")
+
 _G.serializeTable = function(val, name, skipnewlines, depth)
   skipnewlines = skipnewlines or false
   depth = depth or 0
@@ -42,4 +44,8 @@ _G.table.contains = function(table, value)
     end
   end
   return false
+end
+
+_G.os.timeInMils = function()
+  return socket.gettime() * 1000
 end
