@@ -153,9 +153,38 @@ function Shape:rotate()
   self:computeSize()
 end
 
----@return number[]
+function Shape:removeFullLines()
+  local fullRows = self:findFullRows()
+  if #fullRows == 0 then
+    return 0
+  end
+
+  local newGrid = {}
+
+  for _, square in ipairs(self.squares) do
+    if table.contains(fullRows, square.row) then
+      goto continue
+    end
+    local copy = square:copy()
+    local rowBeforeShifting = copy.row
+    for _, fullRow in ipairs(fullRows) do
+      if fullRow > rowBeforeShifting then
+        copy.row = copy.row + 1
+      end
+    end
+
+    table.insert(newGrid, copy)
+    ::continue::
+  end
+  self.squares = newGrid
+
+  return #fullRows
+end
+
 function Shape:findFullRows()
+  ---@type number[]
   local fullRows = {}
+  ---@type table<number, number>
   local populationDict = {}
 
   for _, square in ipairs(self.squares) do

@@ -31,3 +31,15 @@ _G.serializeTable = function(val, name, skipnewlines, depth)
 
   return tmp
 end
+
+---@param table table
+---@param value any
+---@return boolean
+_G.table.contains = function(table, value)
+  for _, item in ipairs(table) do
+    if item == value then
+      return true
+    end
+  end
+  return false
+end
