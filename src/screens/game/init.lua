@@ -7,6 +7,9 @@ local conf = require("conf")
 ---@field sidebar Sidebar
 ---@field nextFall number
 ---@field isPlayerFalling boolean
+---@field remainingAfterPaused number
+---@field paused boolean
+---@field shouldRestart boolean
 local Game = {}
 
 ---@return GameScreen
@@ -17,6 +20,9 @@ function Game:new()
     sidebar = Sidebar:new(conf.SIDEBAR_WIDTH, conf.CANVAS_HEIGHT),
     nextFall = os.timeInMils(),
     isPlayerFalling = false,
+    remainingAfterPaused = 0,
+    paused = false,
+    shouldRestart = false,
   }
   setmetatable(o, self)
   self.__index = self
@@ -65,6 +71,19 @@ function Game:makePlayerFall()
     self.sidebar.nextPlayer = self.playfield.nextPlayer:copy()
   end
   self.isPlayerFalling = false
+end
+
+function Game:togglePaused()
+  self.paused = not self.paused
+  if self.paused then
+    local now = os.timeInMils()
+    self.remainingAfterPaused = now < self.nextFall and self.nextFall - now or 0
+  end
+end
+
+function Game:restart()
+  self.shouldRestart = true
+  self.playfield:resetScore()
 end
 
 return Game
