@@ -94,7 +94,7 @@ function Playfield:spawnPlayer()
   self.nextPlayer = tetromino:randomTetromino()
 end
 
-function Playfield:rotate()
+function Playfield:rotatePlayer()
   local forshadow = self.player:copy()
   forshadow:rotate()
   if forshadow:collidesWith(self.opponent) or (not forshadow:withinBounds()) then

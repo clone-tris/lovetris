@@ -15,3 +15,7 @@ end
 function love.update()
   game:update()
 end
+
+function love.keypressed(key)
+  game:keypressed(key)
+end

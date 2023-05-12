@@ -92,4 +92,35 @@ function Game:restart()
   self.playfield:resetScore()
 end
 
+local keysTable = {
+  ["w"] = { table = Playfield, action = Playfield.rotatePlayer },
+  ["up"] = { table = Playfield, action = Playfield.rotatePlayer },
+  ["space"] = { table = Playfield, action = Playfield.rotatePlayer },
+  ["a"] = { table = Playfield, action = Playfield.moveLeft },
+  ["left"] = { table = Playfield, action = Playfield.moveLeft },
+  ["d"] = { table = Playfield, action = Playfield.moveRight },
+  ["right"] = { table = Playfield, action = Playfield.moveRight },
+  ["s"] = { table = Game, action = Game.makePlayerFall },
+  ["down"] = { table = Game, action = Game.makePlayerFall },
+  ["r"] = { table = Game, action = Game.restart },
+  ["p"] = { table = Game, action = Game.togglePaused },
+}
+
+---@param
+function Game:keypressed(key)
+  if keysTable[key] == nil then
+    return
+  end
+
+  local actionTable = keysTable[key]
+
+  if actionTable.table == Playfield then
+    actionTable.action(self.playfield)
+  end
+
+  if actionTable.table == Game then
+    actionTable.action(self)
+  end
+end
+
 return Game
