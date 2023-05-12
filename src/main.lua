@@ -5,6 +5,7 @@ local Game = require("screens.game")
 local game
 
 function love.load()
+  love.keyboard.setKeyRepeat(true)
   game = Game:new()
 end
 
