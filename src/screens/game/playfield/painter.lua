@@ -6,14 +6,17 @@ local colors = require("colors")
 ---@field width number
 ---@field height number
 local Painter = setmetatable({}, { __index = EnginePainter })
-Painter.__index = Painter
 
 ---@param width number
 ---@param height number
 function Painter:new(width, height)
-  local o = setmetatable(EnginePainter:new(width, height), Painter)
+  local o = EnginePainter:new(width, height)
+  setmetatable(o, self)
+  self.__index = self
+
   o.width = width
   o.height = height
+
   return o
 end
 

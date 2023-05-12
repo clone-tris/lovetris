@@ -6,7 +6,6 @@ local conf = require("conf")
 ---@field playfield Playfield
 ---@field sidebar Sidebar
 local Game = {}
-Game.__index = Game
 
 ---@return GameScreen
 function Game:new()
@@ -15,6 +14,7 @@ function Game:new()
     sidebar = Sidebar:new(conf.SIDEBAR_WIDTH, conf.CANVAS_HEIGHT),
   }
   setmetatable(o, self)
+  self.__index = self
   return o
 end
 

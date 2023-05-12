@@ -8,7 +8,6 @@ local conf = require("conf")
 ---@field color Color
 ---@field squares Square[]
 local Shape = {}
-Shape.__index = Shape
 
 ---@param row number
 ---@param column number
@@ -31,6 +30,7 @@ function Shape:new(row, column, squares, color, size)
   end
 
   setmetatable(o, self)
+  self.__index = self
 
   return o
 end

@@ -5,7 +5,6 @@ local colors = require("colors")
 ---@field column number
 ---@field color Color
 local Square = {}
-Square.__index = Square
 
 ---@param row number
 ---@param column number
@@ -14,6 +13,8 @@ Square.__index = Square
 function Square:new(row, column, color)
   local o = { row = row, column = column, color = color }
   setmetatable(o, self)
+  self.__index = self
+
   return o
 end
 

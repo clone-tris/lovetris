@@ -3,7 +3,6 @@
 ---@field height number
 ---@field canvas love.Canvas
 local EnginePainter = {}
-EnginePainter.__index = EnginePainter
 
 ---@param width number
 ---@param height number
@@ -14,6 +13,7 @@ function EnginePainter:new(width, height)
     canvas = love.graphics.newCanvas(width, height),
   }
   setmetatable(o, self)
+  self.__index = self
   return o
 end
 

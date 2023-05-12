@@ -1,9 +1,11 @@
 ---@class Screen
 local Screen = {}
-Screen.__index = Screen
 
 function Screen:new()
-  return setmetatable({}, self)
+  local o = {}
+  setmetatable(o, self)
+  self.__index = self
+  return o
 end
 
 function Screen:paint() end
