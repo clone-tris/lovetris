@@ -61,7 +61,7 @@ function Game:applyGravity()
 end
 
 function Game:makePlayerFall()
-  if self.isPlayerFalling then
+  if self.paused or self.isPlayerFalling then
     return
   end
 
@@ -79,6 +79,27 @@ function Game:makePlayerFall()
   self.isPlayerFalling = false
 end
 
+function Game:rotatePlayer()
+  if self.paused then
+    return
+  end
+  self.playfield:rotatePlayer()
+end
+
+function Game:moveLeft()
+  if self.paused then
+    return
+  end
+  self.playfield:moveLeft()
+end
+
+function Game:moveRight()
+  if self.paused then
+    return
+  end
+  self.playfield:moveRight()
+end
+
 function Game:togglePaused()
   self.paused = not self.paused
   if self.paused then
@@ -93,34 +114,25 @@ function Game:restart()
 end
 
 local keysTable = {
-  ["w"] = { table = Playfield, action = Playfield.rotatePlayer },
-  ["up"] = { table = Playfield, action = Playfield.rotatePlayer },
-  ["space"] = { table = Playfield, action = Playfield.rotatePlayer },
-  ["a"] = { table = Playfield, action = Playfield.moveLeft },
-  ["left"] = { table = Playfield, action = Playfield.moveLeft },
-  ["d"] = { table = Playfield, action = Playfield.moveRight },
-  ["right"] = { table = Playfield, action = Playfield.moveRight },
-  ["s"] = { table = Game, action = Game.makePlayerFall },
-  ["down"] = { table = Game, action = Game.makePlayerFall },
-  ["r"] = { table = Game, action = Game.restart },
-  ["p"] = { table = Game, action = Game.togglePaused },
+  ["w"] = Game.rotatePlayer,
+  ["up"] = Game.rotatePlayer,
+  ["space"] = Game.rotatePlayer,
+  ["a"] = Game.moveLeft,
+  ["left"] = Game.moveLeft,
+  ["d"] = Game.moveRight,
+  ["right"] = Game.moveRight,
+  ["s"] = Game.makePlayerFall,
+  ["down"] = Game.makePlayerFall,
+  ["r"] = Game.restart,
+  ["p"] = Game.togglePaused,
 }
 
----@param
+---@param key string
 function Game:keypressed(key)
   if keysTable[key] == nil then
     return
   end
-
-  local actionTable = keysTable[key]
-
-  if actionTable.table == Playfield then
-    actionTable.action(self.playfield)
-  end
-
-  if actionTable.table == Game then
-    actionTable.action(self)
-  end
+  keysTable[key](self)
 end
 
 return Game
