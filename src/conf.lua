@@ -17,8 +17,6 @@ M.CANVAS_HEIGHT = M.PUZZLE_HEIGHT * M.SQUARE_WIDTH
 function love.conf(t)
   t.window.width = M.CANVAS_WIDTH
   t.window.height = M.CANVAS_HEIGHT
-  -- t.window.x = 5
-  -- t.window.y = 40
   t.window.title = "Lövetris"
 end
 
