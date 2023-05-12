@@ -38,16 +38,14 @@ function Playfield:new(width, height)
   )
   o.player = tetromino.randomTetromino()
   o.nextPlayer = tetromino.randomTetromino()
-  o.score = Score:new()
-  o.fallRate = 100
-  o.floorRate = 50
   o.onFloor = false
   o.isGameEnded = false
   o.endOfLock = os.timeInMils()
+  o.floorRate = 500
+  o.fallRate = 1000
+  o.score = Score:new()
 
   o:spawnPlayer()
-
-  o.player.row = 4
 
   return o
 end
@@ -144,6 +142,14 @@ function Playfield:handleFallingDown()
   if self.player:collidesWith(self.opponent) then
     self.game_ended = true
   end
+end
+
+function Playfield:moveRight()
+  return self:movePlayer(0, 1)
+end
+
+function Playfield:moveLeft()
+  return self:movePlayer(0, -1)
 end
 
 function Playfield:fallDown()

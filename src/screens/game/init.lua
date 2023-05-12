@@ -18,10 +18,11 @@ function Game:new()
   local o = {
     playfield = Playfield:new(conf.WAR_ZONE_WIDTH, conf.CANVAS_HEIGHT),
     sidebar = Sidebar:new(conf.SIDEBAR_WIDTH, conf.CANVAS_HEIGHT),
-    nextFall = os.timeInMils(),
     isPlayerFalling = false,
-    remainingAfterPaused = 0,
     paused = false,
+    nextFall = os.timeInMils(),
+    remainingAfterPaused = 0,
+    showGameOver = false,
     shouldRestart = false,
   }
   setmetatable(o, self)
@@ -30,12 +31,13 @@ function Game:new()
 end
 
 function Game:paint()
+  --
   love.graphics.setCanvas(self.sidebar.painter.canvas)
   self.sidebar:paint()
 
   love.graphics.setCanvas(self.playfield.painter.canvas)
   self.playfield:paint()
-
+  --
   love.graphics.setCanvas()
   love.graphics.setColor(1, 1, 1)
   love.graphics.draw(self.sidebar.painter.canvas, 0, 0)
@@ -43,6 +45,10 @@ function Game:paint()
 end
 
 function Game:update()
+  if self.paused or self.showGameOver then
+    return
+  end
+
   self:applyGravity()
 end
 
