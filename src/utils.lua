@@ -1,5 +1,4 @@
-local M = {}
-M.serializeTable = function(val, name, skipnewlines, depth)
+_G.serializeTable = function(val, name, skipnewlines, depth)
   skipnewlines = skipnewlines or false
   depth = depth or 0
 
@@ -14,7 +13,7 @@ M.serializeTable = function(val, name, skipnewlines, depth)
 
     for k, v in pairs(val) do
       tmp = tmp
-        .. M.serializeTable(v, k, skipnewlines, depth + 1)
+        .. serializeTable(v, k, skipnewlines, depth + 1)
         .. ","
         .. (not skipnewlines and "\n" or "")
     end
@@ -32,5 +31,3 @@ M.serializeTable = function(val, name, skipnewlines, depth)
 
   return tmp
 end
-
-return M

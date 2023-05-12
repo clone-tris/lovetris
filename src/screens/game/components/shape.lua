@@ -153,4 +153,22 @@ function Shape:rotate()
   self:computeSize()
 end
 
+---@return number[]
+function Shape:findFullRows()
+  local fullRows = {}
+  local populationDict = {}
+
+  for _, square in ipairs(self.squares) do
+    local rowPopulation = populationDict[square.row]
+    rowPopulation = rowPopulation == nil and 1 or rowPopulation + 1
+    populationDict[square.row] = rowPopulation
+
+    if rowPopulation == conf.PUZZLE_WIDTH then
+      table.insert(fullRows, square.row)
+    end
+  end
+
+  return fullRows
+end
+
 return Shape

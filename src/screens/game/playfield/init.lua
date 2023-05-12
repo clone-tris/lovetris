@@ -22,11 +22,24 @@ function Playfield:new(width, height)
   o.opponent = Shape:new(
     0,
     0,
-    true and {} or tetromino.randomTetromino().squares,
+    {},
     colors.SquareColors.DEFAULT_SQUARE_COLOR,
     { width = conf.PUZZLE_WIDTH, height = conf.PUZZLE_HEIGHT }
   )
   o.player = tetromino.randomTetromino()
+
+  local a = tetromino.getTetromino("I")
+  local b = tetromino.getTetromino("I")
+  local c = tetromino.getTetromino("O")
+  a.row = conf.PUZZLE_HEIGHT - 1
+  b.row = conf.PUZZLE_HEIGHT - 1
+  b.column = 4
+  c.row = conf.PUZZLE_HEIGHT - 2
+  c.column = 8
+  o.opponent:eat(a)
+  o.opponent:eat(b)
+  o.opponent:eat(c)
+
   return o
 end
 
