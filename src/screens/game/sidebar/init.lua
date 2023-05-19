@@ -25,14 +25,7 @@ end
 
 function Sidebar:paint()
   self.painter:drawBackground()
-
-  love.graphics.setCanvas(self.nextPlayerCanvas)
-  love.graphics.clear(colors.UiColors.SIDEBAR_BACKGROUND)
-  self.nextPlayer:draw()
-
-  love.graphics.setCanvas(self.painter.canvas)
-  love.graphics.setColor(1, 1, 1)
-  love.graphics.draw(self.nextPlayerCanvas, conf.SQUARE_WIDTH, conf.SQUARE_WIDTH)
+  self.painter:drawNextPlayer(self.nextPlayerCanvas, self.nextPlayer)
 end
 
 return Sidebar
