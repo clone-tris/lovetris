@@ -37,7 +37,7 @@ function Game:new()
     shouldRestart = false,
     nextFall = os.timeInMils(),
     remainingAfterPaused = 0,
-    floorRate = 100,
+    floorRate = 500,
     fallRate = 1000,
     score = Score:new(),
   }
@@ -70,29 +70,6 @@ function Game:update()
   self:applyGravity()
 end
 
----@param linesRemoved number
-function Game:applyScore(linesRemoved)
-  local points = Score.pointsTable[linesRemoved]
-
-  points = points * (self.score.level + 1)
-
-  self.score.total = self.score.total + points
-  self.score.linesCleared = self.score.linesCleared + linesRemoved
-  self.score.level = math.floor(self.score.linesCleared / 10) + 1
-end
-
-function Game:spawnPlayer()
-  local player = self.nextPlayer:copy()
-  player.row = player.row - player.height
-  player.column = math.floor((conf.PUZZLE_WIDTH - player.width) / 2)
-  self.playfield.player = player
-  self.nextPlayer = tetromino:randomTetromino()
-end
-
-function Game:resetScore()
-  self.score = Score:new()
-end
-
 function Game:applyGravity()
   local now = os.timeInMils()
   if now < self.nextFall then
@@ -112,7 +89,7 @@ function Game:makePlayerFall()
   end
   self.isPlayerFalling = true
 
-  local ableToMove = self:movePlayer(1, 0)
+  local ableToMove = self:movePlayerDown()
 
   local now = os.timeInMils()
   if ableToMove then
@@ -134,7 +111,7 @@ function Game:mopTheFloor()
   end
   self.isMoppingTheFloor = true
 
-  local ableToMove = self:movePlayer(1, 0)
+  local ableToMove = self:movePlayerDown()
   if not ableToMove then
     self:eatPlayer()
     self:spawnPlayer()
@@ -149,9 +126,35 @@ function Game:mopTheFloor()
   self.isMoppingTheFloor = false
 end
 
+function Game:spawnPlayer()
+  local player = self.nextPlayer:copy()
+  player.row = player.row - player.height
+  player.column = math.floor((conf.PUZZLE_WIDTH - player.width) / 2)
+  self.playfield.player = player
+  self.nextPlayer = tetromino:randomTetromino()
+end
+
+---@param linesRemoved number
+function Game:applyScore(linesRemoved)
+  local points = Score.pointsTable[linesRemoved]
+
+  points = points * (self.score.level + 1)
+
+  self.score.total = self.score.total + points
+  self.score.linesCleared = self.score.linesCleared + linesRemoved
+  self.score.level = math.floor(self.score.linesCleared / 10) + 1
+end
+
+function Game:resetScore()
+  self.score = Score:new()
+end
+
 ---@param rowDirection number
 ---@param columnDirection number
 function Game:movePlayer(rowDirection, columnDirection)
+  if self.paused then
+    return
+  end
   local foreshadow = self.playfield.player:copy()
   foreshadow:translate(rowDirection, columnDirection)
   local ableToMove = not foreshadow:collidesWith(self.playfield.opponent)
@@ -177,18 +180,16 @@ function Game:rotatePlayer()
   self.playfield.player = forshadow
 end
 
-function Game:moveLeft()
-  if self.paused then
-    return
-  end
+function Game:movePlayerLeft()
   self:movePlayer(0, -1)
 end
 
-function Game:moveRight()
-  if self.paused then
-    return
-  end
+function Game:movePlayerRight()
   self:movePlayer(0, 1)
+end
+
+function Game:movePlayerDown()
+  return self:movePlayer(1, 0)
 end
 
 function Game:eatPlayer()
@@ -222,12 +223,12 @@ local keysTable = {
   ["w"] = Game.rotatePlayer,
   ["up"] = Game.rotatePlayer,
   ["space"] = Game.rotatePlayer,
-  ["a"] = Game.moveLeft,
-  ["left"] = Game.moveLeft,
-  ["d"] = Game.moveRight,
-  ["right"] = Game.moveRight,
-  ["s"] = Game.makePlayerFall,
-  ["down"] = Game.makePlayerFall,
+  ["a"] = Game.movePlayerLeft,
+  ["left"] = Game.movePlayerLeft,
+  ["d"] = Game.movePlayerRight,
+  ["right"] = Game.movePlayerRight,
+  ["s"] = Game.movePlayerDown,
+  ["down"] = Game.movePlayerDown,
   ["r"] = Game.restart,
   ["p"] = Game.togglePaused,
 }
