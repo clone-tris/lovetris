@@ -1,15 +1,24 @@
+local conf = require("conf")
 local Sidebar = require("screens.game.sidebar")
 local Playfield = require("screens.game.playfield")
-local conf = require("conf")
+local Score = require("screens.game.components.score")
+local tetromino = require("screens.game.components.tetromino")
 
 ---@class GameScreen
 ---@field playfield Playfield
 ---@field sidebar Sidebar
----@field nextFall number
----@field isPlayerFalling boolean
----@field remainingAfterPaused number
+---@field nextPlayer Shape
 ---@field paused boolean
+---@field isGameEnded boolean
 ---@field shouldRestart boolean
+---@field isPlayerFalling boolean
+---@field isMoppingTheFloor boolean
+---@field onFloor boolean
+---@field nextFall number
+---@field remainingAfterPaused number
+---@field score Score
+---@field fallRate number
+---@field floorRate number
 local Game = {}
 
 ---@return GameScreen
@@ -18,15 +27,24 @@ function Game:new()
   local o = {
     playfield = Playfield:new(conf.WAR_ZONE_WIDTH, conf.CANVAS_HEIGHT),
     sidebar = Sidebar:new(conf.SIDEBAR_WIDTH, conf.CANVAS_HEIGHT),
-    isPlayerFalling = false,
+    nextPlayer = tetromino.randomTetromino(),
     paused = false,
+    isGameEnded = false,
+    showGameOver = false,
+    isPlayerFalling = false,
+    isMoppingTheFloor = false,
+    onFloor = false,
+    shouldRestart = false,
     nextFall = os.timeInMils(),
     remainingAfterPaused = 0,
-    showGameOver = false,
-    shouldRestart = false,
+    floorRate = 100,
+    fallRate = 1000,
+    score = Score:new(),
   }
   setmetatable(o, self)
   self.__index = self
+
+  o:spawnPlayer()
   return o
 end
 
@@ -52,11 +70,39 @@ function Game:update()
   self:applyGravity()
 end
 
+---@param linesRemoved number
+function Game:applyScore(linesRemoved)
+  local points = Score.pointsTable[linesRemoved]
+
+  points = points * (self.score.level + 1)
+
+  self.score.total = self.score.total + points
+  self.score.linesCleared = self.score.linesCleared + linesRemoved
+  self.score.level = math.floor(self.score.linesCleared / 10) + 1
+end
+
+function Game:spawnPlayer()
+  local player = self.nextPlayer:copy()
+  player.row = player.row - player.height
+  player.column = math.floor((conf.PUZZLE_WIDTH - player.width) / 2)
+  self.playfield.player = player
+  self.nextPlayer = tetromino:randomTetromino()
+end
+
+function Game:resetScore()
+  self.score = Score:new()
+end
+
 function Game:applyGravity()
   local now = os.timeInMils()
-  if now >= self.nextFall then
+  if now < self.nextFall then
+    return
+  end
+
+  if self.onFloor then
+    self:mopTheFloor()
+  else
     self:makePlayerFall()
-    self.nextFall = now + self.playfield.fallRate
   end
 end
 
@@ -64,40 +110,99 @@ function Game:makePlayerFall()
   if self.paused or self.isPlayerFalling then
     return
   end
-
   self.isPlayerFalling = true
-  local ableToMove = self.playfield:fallDown()
-  if (not ableToMove) and self.playfield.isGameEnded then
-    self.showGameOver = true
+
+  local ableToMove = self:movePlayer(1, 0)
+
+  local now = os.timeInMils()
+  if ableToMove then
+    self.onFloor = false
+    self.nextFall = now + self.fallRate
+  else
+    self.onFloor = true
+    self.endOfLock = now + self.floorRate
+    self.nextFall = self.endOfLock
+  end
+
+  self.isPlayerFalling = false
+end
+
+function Game:mopTheFloor()
+  local time = os.timeInMils()
+  if time < self.endOfLock or self.paused or self.isMoppingTheFloor then
     return
   end
+  self.isMoppingTheFloor = true
 
-  if (not ableToMove) and self.playfield.onFloor then
-    self.nextFall = self.playfield.endOfLock
-    self.sidebar.nextPlayer = self.playfield.nextPlayer:copy()
+  local ableToMove = self:movePlayer(1, 0)
+  if not ableToMove then
+    self:eatPlayer()
+    self:spawnPlayer()
+
+    if self.playfield.player:collidesWith(self.playfield.opponent) then
+      self.isGameEnded = true
+      self.showGameOver = true
+    end
   end
-  self.isPlayerFalling = false
+
+  self.onFloor = false
+  self.isMoppingTheFloor = false
+end
+
+---@param rowDirection number
+---@param columnDirection number
+function Game:movePlayer(rowDirection, columnDirection)
+  local foreshadow = self.playfield.player:copy()
+  foreshadow:translate(rowDirection, columnDirection)
+  local ableToMove = not foreshadow:collidesWith(self.playfield.opponent)
+    and foreshadow:withinBounds()
+
+  if ableToMove then
+    self.playfield.player = foreshadow
+  end
+
+  return ableToMove
 end
 
 function Game:rotatePlayer()
   if self.paused then
     return
   end
-  self.playfield:rotatePlayer()
+
+  local forshadow = self.playfield.player:copy()
+  forshadow:rotate()
+  if forshadow:collidesWith(self.playfield.opponent) or (not forshadow:withinBounds()) then
+    return
+  end
+  self.playfield.player = forshadow
 end
 
 function Game:moveLeft()
   if self.paused then
     return
   end
-  self.playfield:moveLeft()
+  self:movePlayer(0, -1)
 end
 
 function Game:moveRight()
   if self.paused then
     return
   end
-  self.playfield:moveRight()
+  self:movePlayer(0, 1)
+end
+
+function Game:eatPlayer()
+  self.playfield.opponent:eat(self.playfield.player:copy())
+  local linesRemoved = self.playfield.opponent:removeFullLines()
+  if linesRemoved == 0 then
+    return
+  end
+
+  local currentLevel = self.score.level
+  self:applyScore(linesRemoved)
+  if currentLevel ~= self.score.level then
+    self.fallRate = self.fallRate - self.fallRate / 3
+  end
 end
 
 function Game:togglePaused()
@@ -110,7 +215,7 @@ end
 
 function Game:restart()
   self.shouldRestart = true
-  self.playfield:resetScore()
+  self:resetScore()
 end
 
 local keysTable = {
