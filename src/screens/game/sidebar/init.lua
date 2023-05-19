@@ -1,8 +1,10 @@
 local Screen = require("engine.screen")
 local SidebarPainter = require("screens.game.sidebar.painter")
+local tetromino = require("screens.game.components.tetromino")
 
 ---@class Sidebar: Screen
 ---@field painter SidebarPainter
+---@field nextPlayer Shape
 local Sidebar = setmetatable({}, { __index = Screen })
 
 ---@param width number
@@ -13,12 +15,14 @@ function Sidebar:new(width, height)
   self.__index = self
 
   o.painter = SidebarPainter:new(width, height)
+  o.nextPlayer = tetromino.randomTetromino()
 
   return o
 end
 
 function Sidebar:paint()
-  self.painter:draw_background()
+  self.painter:drawBackground()
+  self.nextPlayer:draw()
 end
 
 return Sidebar

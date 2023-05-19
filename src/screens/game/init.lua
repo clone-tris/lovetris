@@ -7,7 +7,6 @@ local tetromino = require("screens.game.components.tetromino")
 ---@class GameScreen
 ---@field playfield Playfield
 ---@field sidebar Sidebar
----@field nextPlayer Shape
 ---@field paused boolean
 ---@field isGameEnded boolean
 ---@field shouldRestart boolean
@@ -27,7 +26,6 @@ function Game:new()
   local o = {
     playfield = Playfield:new(conf.WAR_ZONE_WIDTH, conf.CANVAS_HEIGHT),
     sidebar = Sidebar:new(conf.SIDEBAR_WIDTH, conf.CANVAS_HEIGHT),
-    nextPlayer = tetromino.randomTetromino(),
     paused = false,
     isGameEnded = false,
     showGameOver = false,
@@ -127,11 +125,11 @@ function Game:mopTheFloor()
 end
 
 function Game:spawnPlayer()
-  local player = self.nextPlayer:copy()
+  local player = self.sidebar.nextPlayer:copy()
   player.row = player.row - player.height
   player.column = math.floor((conf.PUZZLE_WIDTH - player.width) / 2)
   self.playfield.player = player
-  self.nextPlayer = tetromino:randomTetromino()
+  self.sidebar.nextPlayer = tetromino:randomTetromino()
 end
 
 ---@param linesRemoved number

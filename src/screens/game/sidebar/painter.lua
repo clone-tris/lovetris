@@ -15,7 +15,7 @@ function Painter:new(width, height)
   return o
 end
 
-function Painter:draw_background()
+function Painter:drawBackground()
   love.graphics.setColor(colors.UiColors.SIDEBAR_BACKGROUND)
   love.graphics.clear(colors.UiColors.SIDEBAR_BACKGROUND)
 end
