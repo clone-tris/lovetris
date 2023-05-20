@@ -22,10 +22,11 @@ local Game = {}
 
 ---@return GameScreen
 function Game:new()
+  local score = Score:new()
   ---@type GameScreen
   local o = {
     playfield = Playfield:new(conf.WAR_ZONE_WIDTH, conf.CANVAS_HEIGHT),
-    sidebar = Sidebar:new(conf.SIDEBAR_WIDTH, conf.CANVAS_HEIGHT),
+    sidebar = Sidebar:new(conf.SIDEBAR_WIDTH, conf.CANVAS_HEIGHT, score),
     paused = false,
     isGameEnded = false,
     showGameOver = false,
@@ -37,7 +38,7 @@ function Game:new()
     remainingAfterPaused = 0,
     floorRate = 500,
     fallRate = 1000,
-    score = Score:new(),
+    score = score,
   }
   setmetatable(o, self)
   self.__index = self

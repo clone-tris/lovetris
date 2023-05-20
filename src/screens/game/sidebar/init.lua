@@ -8,24 +8,28 @@ local colors = require("colors")
 ---@field painter SidebarPainter
 ---@field nextPlayer Shape
 ---@field nextPlayerCanvas love.Canvas
+---@field score Score
 local Sidebar = setmetatable({}, { __index = Screen })
 
 ---@param width number
 ---@param height number
-function Sidebar:new(width, height)
+---@param score Score
+function Sidebar:new(width, height, score)
   local o = Screen:new()
-  setmetatable(o, self)
-  self.__index = self
-
   o.painter = SidebarPainter:new(width, height)
   o.nextPlayer = tetromino.randomTetromino()
   o.nextPlayerCanvas = love.graphics.newCanvas(4 * conf.SQUARE_WIDTH, 2 * conf.SQUARE_WIDTH)
+  o.score = score
+
+  setmetatable(o, self)
+  self.__index = self
   return o
 end
 
 function Sidebar:paint()
   self.painter:drawBackground()
   self.painter:drawNextPlayer(self.nextPlayerCanvas, self.nextPlayer)
+  self.painter:drawScore(self.score)
 end
 
 return Sidebar
