@@ -1,0 +1,10 @@
+// Static tasks configuration.
+//
+[
+  {
+    "label": "Run project",
+    "command": "love",
+    "args": ["src"],
+    "reveal": "always"
+  }
+]
