@@ -1,5 +1,5 @@
 local Screen = require("engine.screen")
-local Painter = require("menu.painter")
+local Painter = require("screens.menu.painter")
 
 ---@class Menu: Screen
 ---@field painter MenuPainter
@@ -15,7 +15,7 @@ function Menu:new()
 end
 
 function Menu:paint()
-  love.graphics.setCanvas(self.painter.canvas)
+  self.painter:drawBackground()
 end
 
 return Menu
