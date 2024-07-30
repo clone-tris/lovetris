@@ -33,6 +33,8 @@ function Playfield:new(width, height)
 end
 
 function Playfield:paint()
+  love.graphics.setCanvas(self.painter.canvas)
+
   self.painter:drawBackground()
   self.painter:drawGuide()
   self.opponent:draw()

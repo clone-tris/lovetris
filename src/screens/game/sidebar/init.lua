@@ -27,6 +27,8 @@ function Sidebar:new(width, height, score)
 end
 
 function Sidebar:paint()
+  love.graphics.setCanvas(self.painter.canvas)
+
   self.painter:drawBackground()
   self.painter:drawNextPlayer(self.nextPlayerCanvas, self.nextPlayer)
   self.painter:drawScore(self.score)

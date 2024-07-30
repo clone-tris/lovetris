@@ -18,6 +18,7 @@ local tetromino = require("screens.game.components.tetromino")
 ---@field score Score
 ---@field fallRate number
 ---@field floorRate number
+---@field keysTable table<love.KeyConstant,function>
 local Game = {}
 
 ---@return GameScreen
@@ -39,6 +40,19 @@ function Game:new()
     floorRate = 500,
     fallRate = 1000,
     score = score,
+    keysTable = {
+      ["w"] = Game.rotatePlayer,
+      ["up"] = Game.rotatePlayer,
+      ["space"] = Game.rotatePlayer,
+      ["a"] = Game.movePlayerLeft,
+      ["left"] = Game.movePlayerLeft,
+      ["d"] = Game.movePlayerRight,
+      ["right"] = Game.movePlayerRight,
+      ["s"] = Game.movePlayerDown,
+      ["down"] = Game.movePlayerDown,
+      ["r"] = Game.restart,
+      ["p"] = Game.togglePaused,
+    },
   }
   setmetatable(o, self)
   self.__index = self
@@ -47,29 +61,11 @@ function Game:new()
   return o
 end
 
-local keysTable = {
-  ["w"] = Game.rotatePlayer,
-  ["up"] = Game.rotatePlayer,
-  ["space"] = Game.rotatePlayer,
-  ["a"] = Game.movePlayerLeft,
-  ["left"] = Game.movePlayerLeft,
-  ["d"] = Game.movePlayerRight,
-  ["right"] = Game.movePlayerRight,
-  ["s"] = Game.movePlayerDown,
-  ["down"] = Game.movePlayerDown,
-  ["r"] = Game.restart,
-  ["p"] = Game.togglePaused,
-}
-
 function Game:paint()
-  --
-  love.graphics.setCanvas(self.sidebar.painter.canvas)
   self.sidebar:paint()
-
-  love.graphics.setCanvas(self.playfield.painter.canvas)
   self.playfield:paint()
-  --
   love.graphics.setCanvas()
+  --
   love.graphics.setColor(1, 1, 1)
   love.graphics.draw(self.sidebar.painter.canvas, 0, 0)
   love.graphics.draw(self.playfield.painter.canvas, conf.SIDEBAR_WIDTH, 0)
@@ -85,10 +81,10 @@ end
 
 ---@param key string
 function Game:keypressed(key)
-  if keysTable[key] == nil then
+  if self.keysTable[key] == nil then
     return
   end
-  keysTable[key](self)
+  self.keysTable[key](self)
 end
 
 function Game:applyGravity()
