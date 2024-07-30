@@ -47,6 +47,20 @@ function Game:new()
   return o
 end
 
+local keysTable = {
+  ["w"] = Game.rotatePlayer,
+  ["up"] = Game.rotatePlayer,
+  ["space"] = Game.rotatePlayer,
+  ["a"] = Game.movePlayerLeft,
+  ["left"] = Game.movePlayerLeft,
+  ["d"] = Game.movePlayerRight,
+  ["right"] = Game.movePlayerRight,
+  ["s"] = Game.movePlayerDown,
+  ["down"] = Game.movePlayerDown,
+  ["r"] = Game.restart,
+  ["p"] = Game.togglePaused,
+}
+
 function Game:paint()
   --
   love.graphics.setCanvas(self.sidebar.painter.canvas)
@@ -67,6 +81,14 @@ function Game:update()
   end
 
   self:applyGravity()
+end
+
+---@param key string
+function Game:keypressed(key)
+  if keysTable[key] == nil then
+    return
+  end
+  keysTable[key](self)
 end
 
 function Game:applyGravity()
@@ -216,28 +238,6 @@ end
 function Game:restart()
   self.shouldRestart = true
   self:resetScore()
-end
-
-local keysTable = {
-  ["w"] = Game.rotatePlayer,
-  ["up"] = Game.rotatePlayer,
-  ["space"] = Game.rotatePlayer,
-  ["a"] = Game.movePlayerLeft,
-  ["left"] = Game.movePlayerLeft,
-  ["d"] = Game.movePlayerRight,
-  ["right"] = Game.movePlayerRight,
-  ["s"] = Game.movePlayerDown,
-  ["down"] = Game.movePlayerDown,
-  ["r"] = Game.restart,
-  ["p"] = Game.togglePaused,
-}
-
----@param key string
-function Game:keypressed(key)
-  if keysTable[key] == nil then
-    return
-  end
-  keysTable[key](self)
 end
 
 return Game
