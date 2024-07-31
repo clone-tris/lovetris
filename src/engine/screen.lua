@@ -10,5 +10,6 @@ end
 
 function Screen:paint() end
 function Screen:update() end
+function Screen:keypressed() end
 
 return Screen

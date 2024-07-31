@@ -14,9 +14,9 @@ function love.draw()
 end
 
 function love.update()
-  -- game:update()
+  game:update()
 end
 
 function love.keypressed(key)
-  -- game:keypressed(key)
+  game:keypressed(key)
 end

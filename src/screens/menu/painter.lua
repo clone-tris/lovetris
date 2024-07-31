@@ -12,7 +12,7 @@ function Painter:new()
 end
 
 function Painter:drawBackground()
-  love.graphics.clear(colors.TetrominoColors.PURPLE)
+  love.graphics.clear(colors.UiColors.BACKGROUND)
 end
 
 return Painter
