@@ -22,7 +22,8 @@ end
 ---@param nextPlayer Shape
 function Painter:drawNextPlayer(nextPlayerCanvas, nextPlayer)
   love.graphics.setCanvas(nextPlayerCanvas)
-  love.graphics.clear(colors.UiColors.SIDEBAR_BACKGROUND)
+  love.graphics.clear(colors.UiColors.BACKGROUND)
+  self:drawGuide()
   nextPlayer:draw()
 
   love.graphics.setCanvas(self.canvas)
