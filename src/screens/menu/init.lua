@@ -22,6 +22,7 @@ end
 
 function Menu:paint()
   self.painter:drawBackground()
+  self.painter:drawGuide()
   self.graphic:draw()
 end
 
