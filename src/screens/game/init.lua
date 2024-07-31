@@ -79,7 +79,7 @@ function Game:update()
   self:applyGravity()
 end
 
----@param key string
+---@param key love.KeyConstant
 function Game:keypressed(key)
   if self.keysTable[key] == nil then
     return

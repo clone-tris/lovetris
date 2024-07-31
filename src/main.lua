@@ -1,12 +1,11 @@
 require("utils")
-local Menu = require("screens.menu.init")
+local Game = require("screens.menu")
 
----@type GameScreen
 local game
 
 function love.load()
   love.keyboard.setKeyRepeat(true)
-  game = Menu:new()
+  game = Game:new()
 end
 
 function love.draw()
@@ -19,4 +18,8 @@ end
 
 function love.keypressed(key)
   game:keypressed(key)
+end
+
+function love.mousereleased(x, y, button)
+  game:mousereleased(x, y, button)
 end

@@ -2,7 +2,6 @@ local Screen = require("engine.screen")
 local Painter = require("screens.game.sidebar.painter")
 local tetromino = require("screens.game.components.tetromino")
 local conf = require("conf")
-local colors = require("colors")
 
 ---@class Sidebar: Screen
 ---@field painter SidebarPainter

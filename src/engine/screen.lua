@@ -10,6 +10,13 @@ end
 
 function Screen:paint() end
 function Screen:update() end
-function Screen:keypressed() end
+
+---@param key love.KeyConstant
+function Screen:keypressed(key) end
+
+---@param x number
+---@param y number
+---@param button number
+function Screen:mousereleased(x, y, button) end
 
 return Screen

@@ -34,14 +34,17 @@ local UiColors = {
   BACKGROUND = hex2rgba("#333333"),
   SIDEBAR_BACKGROUND = hex2rgba("#545454"),
   POPUP_BACKGROUND = hex2rgba("#212121"),
+  BUTTON_BACKGROUND = TetrominoColors.CYAN,
   GUIDE = hex2rgba("#555555"),
   WHITE_TEXT = hex2rgba("#FFFFFF"),
   POPUP_TEXT = hex2rgba("#EFEFEF"),
+  BUTTON_TEXT = hex2rgba("#212121"),
 }
 
 ---@alias Color UiColors|TetrominoColors|SquareColors
 
 return {
+  hex2rgba = hex2rgba,
   TetrominoColors = TetrominoColors,
   UiColors = UiColors,
   SquareColors = SquareColors,
