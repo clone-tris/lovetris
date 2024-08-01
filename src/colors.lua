@@ -12,13 +12,13 @@ end
 
 ---@enum TetrominoColors
 local TetrominoColors = {
-  CYAN = hex2rgba("#00e6fe"),
-  BLUE = hex2rgba("#1801ff"),
-  ORANGE = hex2rgba("#ff7308"),
-  YELLOW = hex2rgba("#ffde00"),
-  GREEN = hex2rgba("#66fd00"),
-  PURPLE = hex2rgba("#b802fd"),
-  RED = hex2rgba("#fe103c"),
+  CYAN = hex2rgba("#6DECEE"),
+  BLUE = hex2rgba("#0014E6"),
+  ORANGE = hex2rgba("#E4A338"),
+  YELLOW = hex2rgba("#F0EF4F"),
+  GREEN = hex2rgba("#6EEB47"),
+  PURPLE = hex2rgba("#9225E7"),
+  RED = hex2rgba("#DC2F20"),
 }
 
 ---@enum SquareColors
