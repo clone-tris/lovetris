@@ -33,9 +33,13 @@ end
 
 ---@param score Score
 function Painter:drawScore(score)
-  love.graphics.draw(score.levelText, conf.SQUARE_WIDTH / 3, conf.SQUARE_WIDTH * 4)
-  love.graphics.draw(score.linesClearedText, conf.SQUARE_WIDTH / 3, conf.SQUARE_WIDTH * 6)
-  love.graphics.draw(score.totalText, conf.SQUARE_WIDTH / 3, conf.SQUARE_WIDTH * 8)
+  love.graphics.draw(score.levelText, math.floor(conf.SQUARE_WIDTH / 3), conf.SQUARE_WIDTH * 4)
+  love.graphics.draw(
+    score.linesClearedText,
+    math.floor(conf.SQUARE_WIDTH / 3),
+    conf.SQUARE_WIDTH * 6
+  )
+  love.graphics.draw(score.totalText, math.floor(conf.SQUARE_WIDTH / 3), conf.SQUARE_WIDTH * 8)
 end
 
 return Painter

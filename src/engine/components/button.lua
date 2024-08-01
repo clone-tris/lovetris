@@ -28,8 +28,8 @@ function Button:new(text, x, y)
   local width = 2 * BUTTON_PADDING_LEFT + textWidth
   local height = 2 * BUTTON_PADDING_TOP + textHeight
 
-  local textX = x + (width - textWidth) / 2
-  local textY = y + (height - textHeight) / 2
+  local textX = math.floor(x + (width - textWidth) / 2)
+  local textY = math.floor(y + (height - textHeight) / 2)
 
   local o = {
     textElement = textElement,

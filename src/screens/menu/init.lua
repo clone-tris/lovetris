@@ -21,7 +21,7 @@ function Menu:new()
     Shape:new(1, 1, graphic.getGraphicSquareGrid(), colors.SquareColors.DEFAULT_SQUARE_COLOR)
 
   o.startButton = Button:new("[S]tart", 4 * conf.SQUARE_WIDTH, 17 * conf.SQUARE_WIDTH)
-  o.quitButton = Button:new("[Q]uit", 8 * conf.SQUARE_WIDTH, 17 * conf.SQUARE_WIDTH)
+  o.quitButton = Button:new("[Q]uit", 9 * conf.SQUARE_WIDTH, 17 * conf.SQUARE_WIDTH)
 
   setmetatable(o, self)
   self.__index = self
