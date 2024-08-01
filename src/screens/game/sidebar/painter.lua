@@ -31,22 +31,11 @@ function Painter:drawNextPlayer(nextPlayerCanvas, nextPlayer)
   love.graphics.draw(nextPlayerCanvas, conf.SQUARE_WIDTH, conf.SQUARE_WIDTH)
 end
 
-local font = love.graphics.newFont(14)
-local scoreText = love.graphics.newText(font)
-local linesClearedText = love.graphics.newText(font)
-local totalText = love.graphics.newText(font)
-
 ---@param score Score
 function Painter:drawScore(score)
-  -- todo: remove text updates from paint function
-  scoreText:set(string.format("Level\n%d", score.level))
-  love.graphics.draw(scoreText, conf.SQUARE_WIDTH / 3, conf.SQUARE_WIDTH * 4)
-
-  linesClearedText:set(string.format("Cleared\n%d", score.linesCleared))
-  love.graphics.draw(linesClearedText, conf.SQUARE_WIDTH / 3, conf.SQUARE_WIDTH * 6)
-
-  totalText:set(string.format("Score\n%d", score.total))
-  love.graphics.draw(totalText, conf.SQUARE_WIDTH / 3, conf.SQUARE_WIDTH * 8)
+  love.graphics.draw(score.levelText, conf.SQUARE_WIDTH / 3, conf.SQUARE_WIDTH * 4)
+  love.graphics.draw(score.linesClearedText, conf.SQUARE_WIDTH / 3, conf.SQUARE_WIDTH * 6)
+  love.graphics.draw(score.totalText, conf.SQUARE_WIDTH / 3, conf.SQUARE_WIDTH * 8)
 end
 
 return Painter

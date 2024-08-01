@@ -58,6 +58,7 @@ function Game:new()
   self.__index = self
 
   o:spawnPlayer()
+  o:updateScoreText()
   return o
 end
 
@@ -153,13 +154,23 @@ end
 
 ---@param linesRemoved number
 function Game:applyScore(linesRemoved)
-  local points = Score.pointsTable[linesRemoved]
+  local basePoints = Score.pointsTable[linesRemoved]
+  local linesCleared = self.score.linesCleared + linesRemoved
+  local level = math.floor(linesCleared / 10) + 1
+  local points = basePoints * (level + 1)
+  local total = self.score.total + points
 
-  points = points * (self.score.level + 1)
+  self.score.level = level
+  self.score.linesCleared = linesCleared
+  self.score.total = total
 
-  self.score.total = self.score.total + points
-  self.score.linesCleared = self.score.linesCleared + linesRemoved
-  self.score.level = math.floor(self.score.linesCleared / 10) + 1
+  self:updateScoreText()
+end
+
+function Game:updateScoreText()
+  self.score.levelText:set(string.format("Level\n%d", self.score.level))
+  self.score.linesClearedText:set(string.format("Cleared\n%d", self.score.linesCleared))
+  self.score.totalText:set(string.format("Score\n%d", self.score.total))
 end
 
 function Game:resetScore()
