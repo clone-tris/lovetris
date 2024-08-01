@@ -8,7 +8,6 @@ local tetromino = require("screens.game.components.tetromino")
 ---@field playfield Playfield
 ---@field sidebar Sidebar
 ---@field paused boolean
----@field isGameEnded boolean
 ---@field shouldRestart boolean
 ---@field isPlayerFalling boolean
 ---@field isMoppingTheFloor boolean
@@ -29,7 +28,6 @@ function Game:new()
     playfield = Playfield:new(conf.WAR_ZONE_WIDTH, conf.CANVAS_HEIGHT),
     sidebar = Sidebar:new(conf.SIDEBAR_WIDTH, conf.CANVAS_HEIGHT, score),
     paused = false,
-    isGameEnded = false,
     showGameOver = false,
     isPlayerFalling = false,
     isMoppingTheFloor = false,
@@ -135,8 +133,16 @@ function Game:mopTheFloor()
     self:spawnPlayer()
 
     if self.playfield.player:collidesWith(self.playfield.opponent) then
-      self.isGameEnded = true
       self.showGameOver = true
+
+      love.graphics.captureScreenshot(function(imgData)
+        local canvasImage = love.graphics.newImage(imgData)
+
+        ---@diagnostic disable-next-line: param-type-mismatch
+        love.event.push("useScreen", "Over", canvasImage)
+      end)
+
+      return
     end
   end
 
