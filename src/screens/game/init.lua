@@ -1,10 +1,11 @@
 local conf = require("conf")
+local Screen = require("engine.screen")
 local Sidebar = require("screens.game.sidebar")
 local Playfield = require("screens.game.playfield")
 local Score = require("screens.game.components.score")
 local tetromino = require("screens.game.components.tetromino")
 
----@class GameScreen
+---@class GameScreen: Screen
 ---@field playfield Playfield
 ---@field sidebar Sidebar
 ---@field paused boolean
@@ -18,45 +19,47 @@ local tetromino = require("screens.game.components.tetromino")
 ---@field fallRate number
 ---@field floorRate number
 ---@field keysTable table<love.KeyConstant,function>
-local Game = {}
+local Game = setmetatable({}, { __index = Screen })
 
 ---@return GameScreen
 function Game:new()
-  local score = Score:new()
   ---@type GameScreen
-  local o = {
-    playfield = Playfield:new(conf.WAR_ZONE_WIDTH, conf.CANVAS_HEIGHT),
-    sidebar = Sidebar:new(conf.SIDEBAR_WIDTH, conf.CANVAS_HEIGHT, score),
-    paused = false,
-    showGameOver = false,
-    isPlayerFalling = false,
-    isMoppingTheFloor = false,
-    onFloor = false,
-    shouldRestart = false,
-    nextFall = os.timeInMils(),
-    remainingAfterPaused = 0,
-    floorRate = 500,
-    fallRate = 1000,
-    score = score,
-    keysTable = {
-      ["w"] = Game.rotatePlayer,
-      ["up"] = Game.rotatePlayer,
-      ["space"] = Game.rotatePlayer,
-      ["a"] = Game.movePlayerLeft,
-      ["left"] = Game.movePlayerLeft,
-      ["d"] = Game.movePlayerRight,
-      ["right"] = Game.movePlayerRight,
-      ["s"] = Game.movePlayerDown,
-      ["down"] = Game.movePlayerDown,
-      ["r"] = Game.restart,
-      ["p"] = Game.togglePaused,
-    },
-  }
+  local o = Screen:new()
   setmetatable(o, self)
   self.__index = self
 
+  local score = Score:new()
+
+  o.playfield = Playfield:new(conf.WAR_ZONE_WIDTH, conf.CANVAS_HEIGHT)
+  o.sidebar = Sidebar:new(conf.SIDEBAR_WIDTH, conf.CANVAS_HEIGHT, score)
+  o.paused = false
+  o.showGameOver = false
+  o.isPlayerFalling = false
+  o.isMoppingTheFloor = false
+  o.onFloor = false
+  o.shouldRestart = false
+  o.nextFall = os.timeInMils()
+  o.remainingAfterPaused = 0
+  o.floorRate = 500
+  o.fallRate = 1000
+  o.score = score
+  o.keysTable = {
+    ["w"] = Game.rotatePlayer,
+    ["up"] = Game.rotatePlayer,
+    ["space"] = Game.rotatePlayer,
+    ["a"] = Game.movePlayerLeft,
+    ["left"] = Game.movePlayerLeft,
+    ["d"] = Game.movePlayerRight,
+    ["right"] = Game.movePlayerRight,
+    ["s"] = Game.movePlayerDown,
+    ["down"] = Game.movePlayerDown,
+    ["r"] = Game.restart,
+    ["p"] = Game.togglePaused,
+  }
+
   o:spawnPlayer()
   o:updateScoreText()
+
   return o
 end
 
