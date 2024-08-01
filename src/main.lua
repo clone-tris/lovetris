@@ -1,25 +1,37 @@
 require("utils")
-local Game = require("screens.menu")
 
-local game
+local Menu = require("screens.menu")
+local Game = require("screens.game")
+
+local currentScreen
 
 function love.load()
   love.keyboard.setKeyRepeat(true)
-  game = Game:new()
+  currentScreen = Menu:new()
 end
 
 function love.draw()
-  game:paint()
+  currentScreen:paint()
 end
 
 function love.update()
-  game:update()
+  currentScreen:update()
 end
 
 function love.keypressed(key)
-  game:keypressed(key)
+  currentScreen:keypressed(key)
 end
 
 function love.mousereleased(x, y, button)
-  game:mousereleased(x, y, button)
+  currentScreen:mousereleased(x, y, button)
+end
+
+---@param name Screen
+---@diagnostic disable-next-line: undefined-field
+function love.handlers.useScreen(name)
+  if name == "Game" then
+    currentScreen = Game:new()
+  elseif name == "Menu" then
+    currentScreen = Menu:new()
+  end
 end

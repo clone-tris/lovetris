@@ -2,6 +2,7 @@ local Screen = require("engine.screen")
 local Painter = require("screens.menu.painter")
 local Button = require("engine.components.button")
 local Shape = require("screens.game.components.shape")
+local Game = require("screens.game")
 local graphic = require("screens.menu.graphic")
 local colors = require("colors")
 local conf = require("conf")
@@ -38,11 +39,12 @@ end
 ---@param key love.KeyConstant
 function Menu:keypressed(key)
   if key == "s" then
-    print("start the game")
+    ---@diagnostic disable-next-line: param-type-mismatch
+    love.event.push("useScreen", "Game")
   end
 
   if key == "q" then
-    love.event.quit(0)
+    love.event.push("quit")
   end
 end
 
@@ -54,10 +56,11 @@ function Menu:mousereleased(x, y, button)
     return
   end
   if self.startButton:contains(x, y) then
-    print("Start the game ....")
+    ---@diagnostic disable-next-line: param-type-mismatch
+    love.event.push("useScreen", "Game")
   end
   if self.quitButton:contains(x, y) then
-    love.event.quit(0)
+    love.event.push("quit")
   end
 end
 
