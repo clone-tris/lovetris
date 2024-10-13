@@ -63,7 +63,7 @@ function Shape:computeSize()
   end
 
   self.height = maxRow - minRow + 1
-  self.width = maxColumn - minRow + 1
+  self.width = maxColumn - minColumn + 1
 end
 
 ---@param rowDirection number
